@@ -1,0 +1,13 @@
+/.idea/
+/*.iml
+
+/.project
+/.classpath
+/.settings/
+
+/node_modules/
+/npm-debug.log
+
+/dist/
+/lib/
+/tmp/
