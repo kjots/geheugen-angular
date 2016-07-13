@@ -25,6 +25,8 @@
     "node": ">=4"
   },
   "devDependencies": {
+    "angular": "^1.5.7",
+    "angular-mocks": "^1.5.7",
     "babel-core": "^6.10.4",
     "babel-polyfill": "^6.9.1",
     "babel-preset-es2015": "^6.9.0",
@@ -37,19 +39,35 @@
     "chokidar": "^1.6.0",
     "del": "^2.2.1",
     "eslint": "^3.0.1",
+    "exposify": "^0.5.0",
+    "geheugen": "^1.4.0",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
     "gulp-eslint": "^3.0.1",
-    "gulp-mocha": "^2.2.0",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-util": "^3.0.7",
+    "karma": "^1.1.1",
+    "karma-babel-preprocessor": "^6.0.1",
+    "karma-chai": "^0.1.0",
+    "karma-chai-as-promised": "^0.1.2",
+    "karma-chrome-launcher": "^1.0.1",
+    "karma-firefox-launcher": "^1.0.0",
+    "karma-ie-launcher": "^1.0.0",
+    "karma-mocha": "^1.1.1",
+    "karma-opera-launcher": "^1.0.0",
+    "karma-phantomjs-launcher": "^1.0.1",
+    "karma-safari-launcher": "^1.0.0",
+    "karma-sinon": "^1.0.5",
     "mocha": "^2.5.3",
+    "phantomjs-polyfill": "0.0.2",
+    "phantomjs-prebuilt": "^2.1.7",
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   },
   "peerDependencies": {
+    "angular": "^1.0.0",
     "babel-polyfill": "^6.9.1"
   }
 }

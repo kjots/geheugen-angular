@@ -7,9 +7,9 @@ import del from 'del';
 import gulp from 'gulp';
 import gulpBabel from 'gulp-babel';
 import gulpEslint from 'gulp-eslint';
-import gulpMocha from 'gulp-mocha';
 import gulpSourcemaps from 'gulp-sourcemaps';
 import gulpUtil from 'gulp-util';
+import karma from 'karma';
 import path from 'path';
 import vinylBuffer from 'vinyl-buffer';
 import vinylSourceStream from 'vinyl-source-stream';
@@ -56,6 +56,7 @@ function dist(recompile) {
     gulpUtil.log('Creating distribution');
 
     return browserify('./lib/index.js', { debug: true, standalone: packageInfo.name })
+        .transform('exposify', { expose: { angular: 'angular' } })
         .bundle()
         .pipe(vinylSourceStream(`${packageInfo.name}.js`))
         .pipe(vinylBuffer())
@@ -64,7 +65,7 @@ function dist(recompile) {
         .pipe(gulp.dest(distBaseDir));
 }
 
-gulp.task('test', [ 'test:eslint', 'test:mocha' ]);
+gulp.task('test', [ 'test:eslint', 'test:karma' ]);
 
 gulp.task('test:eslint', [], () => {
     return gulp.src(srcPattern)
@@ -73,11 +74,10 @@ gulp.task('test:eslint', [], () => {
         .pipe(gulpEslint.failAfterError());
 });
 
-gulp.task('test:mocha', [], () => {
-    return gulp.src([ 'test/init.spec.js', 'src/**/*.spec.js' ], { read: false })
-        .pipe(gulpMocha({
-            require: [ './test/init.js' ]
-        }));
+gulp.task('test:karma', [ 'dist' ], (done) => {
+    let karmaServer = new karma.Server({ configFile: path.resolve('karma.conf.js'), singleRun: true }, done);
+
+    karmaServer.start();
 });
 
 gulp.task('compile', () => compile(srcPattern));
