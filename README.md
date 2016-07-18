@@ -43,7 +43,7 @@ The registry of geheugen [Memo](https://github.com/kjots/geheugen#memo) instance
 #### memosProvider(name)
 Type: `Function`
 
-Returns an Angular constructor<sup>[1](#note1)</sup> for the resolved value of the memo with the provided name.
+Returns an Angular factory<sup>[1](#note1)</sup> for the resolved value of the memo with the provided name.
 
 The return value of this function is suitable for being used as a dependency of an Angular route, e.g.:
 
@@ -69,7 +69,7 @@ Type: `Function`
 
 Register a memo with the provided name.
 
-Returns an Angular constructor<sup>[1](#note1)</sup> for the [memo](#memo-instance).
+Returns an Angular factory<sup>[1](#note1)</sup> for the [memo](#memo-instance).
 
 The return value of this function is suitable for being used as the `$get` method of an Angular provider, e.g.:
 
@@ -77,7 +77,7 @@ The return value of this function is suitable for being used as the `$get` metho
 angular.module('exampleApp')
     .provider('exampleMemo', function (memosProvider) {
         this.$get = memosProvider('example',
-            ($q, $filter) => $q.resolve($filter('number')('3.1415', 2)));
+            $filter => $filter('number')('3.1415', 2));
     });
 ```
 
@@ -109,17 +109,17 @@ The dependencies of the memo.
 
 This array contains the names of the memos upon which this memo depends.
 
-The resolved values of the dependant memos will be available as locals to the Angular constructor<sup>[1](#note1)</sup>
+The resolved values of the dependant memos will be available as locals to the Angular factory<sup>[1](#note1)</sup>
 provided via `factory`, e.g.:
 
 ```js
 angular.module('exampleApp')
     .provider('dependencyMemo', function (memosProvider) {
-        this.$get = memosProvider('dependency', $q => $q.resolve('3.1415'));
+        this.$get = memosProvider('dependency', () => '3.1415');
     })
     .provider('exampleMemo', function (memosProvider) {
         this.$get = memosProvider('example', { dependencies: [ 'dependency' ] },
-            ($q, $filter, dependency) => $q.resolve($filter('number')(dependency, 2)));
+            ($filter, dependency) => $filter('number')(dependency, 2));
     });
 ```
 
@@ -133,11 +133,11 @@ This function will be invoked when the memo is reset.
 This function will be invoked via [`$injector.invoke()`](https://docs.angularjs.org/api/auto/service/$injector#invoke).
 
 ##### factory
-Type: `Function` or `Array`
+Type: `Function` or `Array<String|Function>`
 
-The Angular constructor<sup>[1](#note1)</sup> for the resolved value of the memo.
+The Angular factory<sup>[1](#note1)</sup> for the resolved value of the memo.
 
-The factory must return a promise for the resolved value.
+The factory can return the either resolved value itself or a promise for the resolved value.
 
 #### memos(name)
 Type: `Function`
@@ -192,6 +192,6 @@ Reset the dependants of the memo.
 ## Notes
 
 <small>
-    <a name="note1">1</a>: An Angular constructor is any value that can be passed as the `Type` argument to
-    [`$injector.instantiate()`](https://docs.angularjs.org/api/auto/service/$injector#instantiate).
+    <a name="note1">1</a>: An Angular factory is any value that can be passed as the `fn` argument to
+    [`$injector.invoke()`](https://docs.angularjs.org/api/auto/service/$injector#invoke).
 </small>

@@ -21,7 +21,7 @@ export default angular.module('geheugen', [])
                     singleton: memo.opts.singleton !== undefined ? memo.opts.singleton : true,
                     dependencies: dependencies.map(ensureMemo),
                     onReset: memo.opts.onReset !== undefined ? () => $injector.invoke(memo.opts.onReset) : undefined,
-                    factory: values => $injector.instantiate(memo.factory, dependencies.reduce((locals, dependency, i) => {
+                    factory: values => $injector.invoke(memo.factory, undefined, dependencies.reduce((locals, dependency, i) => {
                         locals[dependency] = values[i];
 
                         return locals;

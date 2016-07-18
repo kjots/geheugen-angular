@@ -4,20 +4,41 @@ describe('geheugen', () => {
     beforeEach(module('geheugen'));
 
     describe('memos()', () => {
-        it('should return the promise for the memo with the provided name', done => {
-            module(memosProvider => {
-                // Given
-                memosProvider('testValue', $q => $q.resolve('Test Value'));
+        describe('when the factory returns a promise', () => {
+            it('should return the promise for the memo with the provided name', done => {
+                module(memosProvider => {
+                    // Given
+                    memosProvider('testValue', $q => $q.resolve('Test Value'));
+                });
+
+                inject(($rootScope, memos) => {
+                    // When
+                    let testValuePromise = memos('testValue');
+
+                    // Then
+                    expect(testValuePromise).to.eventually.equal('Test Value').and.notify(done);
+
+                    $rootScope.$digest();
+                });
             });
+        });
 
-            inject(($rootScope, memos) => {
-                // When
-                let testValuePromise = memos('testValue');
+        describe('when the factory does not return a promise', () => {
+            it('should return the promise for the memo with the provided name', done => {
+                module(memosProvider => {
+                    // Given
+                    memosProvider('testValue', () => 'Test Value');
+                });
 
-                // Then
-                expect(testValuePromise).to.eventually.equal('Test Value').and.notify(done);
+                inject(($rootScope, memos) => {
+                    // When
+                    let testValuePromise = memos('testValue');
 
-                $rootScope.$digest();
+                    // Then
+                    expect(testValuePromise).to.eventually.equal('Test Value').and.notify(done);
+
+                    $rootScope.$digest();
+                });
             });
         });
 
