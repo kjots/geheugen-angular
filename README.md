@@ -77,7 +77,7 @@ The return value of this function is suitable for being used as the `$get` metho
 angular.module('exampleApp')
     .provider('exampleMemo', function (memosProvider) {
         this.$get = memosProvider('example',
-            $filter => $filter('number')('3.1415', 2));
+            ($q, $filter) => $q.resolve($filter('number')('3.1415', 2)));
     });
 ```
 
@@ -115,11 +115,11 @@ provided via `factory`, e.g.:
 ```js
 angular.module('exampleApp')
     .provider('dependencyMemo', function (memosProvider) {
-        this.$get = memosProvider('dependency', () => '3.1415');
+        this.$get = memosProvider('dependency', $q => $q.resolve('3.1415'));
     })
     .provider('exampleMemo', function (memosProvider) {
         this.$get = memosProvider('example', { dependencies: [ 'dependency' ] },
-            ($filter, dependency) => $filter('number')(dependency, 2));
+            ($q, $filter, dependency) => $q.resolve($filter('number')(dependency, 2)));
     });
 ```
 
@@ -137,7 +137,7 @@ Type: `Function` or `Array`
 
 The Angular constructor<sup>[1](#note1)</sup> for the resolved value of the memo.
 
-The factory can return the either resolved value itself or a promise for the resolved value.
+The factory must return a promise for the resolved value.
 
 #### memos(name)
 Type: `Function`
