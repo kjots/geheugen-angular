@@ -4,11 +4,6 @@ describe('geheugen', () => {
     describe('memos()', () => {
         beforeEach(module('geheugen'));
 
-        afterEach(inject(['memos.config', 'memos.registry', function (config, registry) {
-            Object.getOwnPropertyNames(config).forEach(key => delete config[key]);
-            Object.getOwnPropertyNames(registry).forEach(key => delete registry[key]);
-        }]));
-
         describe('when the factory returns a promise', () => {
             it('should throw an error if there is no memo with the provided name', inject(memos => {
                 // Given
