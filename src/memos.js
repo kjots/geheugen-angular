@@ -44,6 +44,10 @@ function ensureMemo($q, $injector, name, context = []) {
 function createMemo($q, $injector, name, context) {
     let nextContext = [ name, ...context ];
 
+    if (config[name] === undefined) {
+        throw new Error(`[geheugen] Unknown memo: ${ nextContext.join(' <- ') }`);
+    }
+
     if (context.includes(name)) {
         throw new Error(`[geheugen] Circular dependency detected: ${ nextContext.join(' <- ') }`);
     }

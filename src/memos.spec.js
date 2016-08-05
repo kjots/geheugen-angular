@@ -10,6 +10,16 @@ describe('geheugen', () => {
         }]));
 
         describe('when the factory returns a promise', () => {
+            it('should throw an error if there is no memo with the provided name', inject(memos => {
+                // Given
+                
+                // When
+                let fn = () => memos('testValue');
+
+                // Then
+                expect(fn).to.throw(Error, '[geheugen] Unknown memo: testValue');
+            }));
+
             it('should return the promise for the memo with the provided name', done => {
                 module(memosProvider => {
                     // Given

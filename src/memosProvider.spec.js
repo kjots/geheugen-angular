@@ -287,6 +287,25 @@ describe('geheugen', () => {
             });
 
             context('when the dependencies option is provided', () => {
+                it('should throw an error if the dependencies contains a dependency that does not exist', () => {
+                    module(memosProvider => {
+                        // Given
+                        memosProvider('testDependencyA', { dependencies: [ 'testDependencyB' ] }, $q => $q.resolve('Test Dependency A'));
+                        memosProvider('testDependencyB', { dependencies: [ 'testDependencyC' ] }, $q => $q.resolve('Test Dependency B'));
+                        memosProvider('testDependencyC', { dependencies: [ 'testDependencyD' ] }, $q => $q.resolve('Test Dependency C'));
+
+                        memosProvider('testValue', { dependencies: [ 'testDependencyA' ] }, $q => $q.resolve('Test Value'));
+                    });
+
+                    inject(memos => {
+                        // When
+                        let fn = () => memos('testValue');
+
+                        // Then
+                        expect(fn).to.throw(Error, '[geheugen] Unknown memo: testDependencyD <- testDependencyC <- testDependencyB <- testDependencyA <- testValue');
+                    });
+                });
+
                 it('should throw an error if the dependencies contains a circular reference', () => {
                     module(memosProvider => {
                         // Given
