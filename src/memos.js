@@ -33,22 +33,28 @@ provider.$get = ['$q', '$injector', ($q, $injector) => {
     return memos;
 }];
 
-function ensureMemo($q, $injector, name) {
+function ensureMemo($q, $injector, name, context = []) {
     if (registry[name] === undefined) {
-        registry[name] = createMemo($q, $injector, name);
+        registry[name] = createMemo($q, $injector, name, context);
     }
 
     return registry[name];
 }
 
-function createMemo($q, $injector, name) {
+function createMemo($q, $injector, name, context) {
+    let nextContext = [ name, ...context ];
+
+    if (context.includes(name)) {
+        throw new Error(`[geheugen] Circular dependency detected: ${ nextContext.join(' <- ') }`);
+    }
+
     let { opts, factory } = config[name];
     let dependencies = opts.dependencies || [];
 
     return new Memo({
         Q: $q,
         singleton: opts.singleton !== undefined ? opts.singleton : true,
-        dependencies: dependencies.map(dependency => ensureMemo($q, $injector, dependency)),
+        dependencies: dependencies.map(dependency => ensureMemo($q, $injector, dependency, nextContext)),
         onReset: opts.onReset !== undefined ? () => $injector.invoke(opts.onReset) : undefined,
         factory: values => $injector.invoke(factory, undefined, dependencies.reduce((locals, dependency, i) => {
             locals[dependency] = values[i];
