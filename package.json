@@ -58,7 +58,7 @@
     "karma-phantomjs-launcher": "^1.0.1",
     "karma-safari-launcher": "^1.0.0",
     "karma-sinon": "^1.0.5",
-    "mocha": "^2.5.3",
+    "mocha": "^3.0.1",
     "phantomjs-polyfill": "0.0.2",
     "phantomjs-prebuilt": "^2.1.10",
     "sinon": "^1.17.5",
