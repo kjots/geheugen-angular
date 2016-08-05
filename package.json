@@ -1,6 +1,6 @@
 {
   "name": "geheugen-angular",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Angular bindings for geheugen",
   "main": "lib/index.js",
   "scripts": {
