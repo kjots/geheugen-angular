@@ -1,9 +1,13 @@
 'use strict';
 
 describe('geheugen', () => {
-    beforeEach(module('geheugen'));
-
     describe('memos()', () => {
+        beforeEach(module('geheugen'));
+
+        afterEach(inject(['memos.registry', function (registry) {
+            Object.getOwnPropertyNames(registry).forEach(key => delete registry[key]);
+        }]));
+
         describe('when the factory returns a promise', () => {
             it('should return the promise for the memo with the provided name', done => {
                 module(memosProvider => {

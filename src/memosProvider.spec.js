@@ -1,9 +1,13 @@
 'use strict';
 
 describe('geheugen', () => {
-    beforeEach(module('geheugen'));
-
     describe('memosProvider()', () => {
+        beforeEach(module('geheugen'));
+
+        afterEach(inject(['memos.registry', function (registry) {
+            Object.getOwnPropertyNames(registry).forEach(key => delete registry[key]);
+        }]));
+
         context('when invoked with 1 argument', () => {
             it('should return an Angular constructor for the promise for the memo with the provided name', done => {
                 let testValuePromiseGetFn;
