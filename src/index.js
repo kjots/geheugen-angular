@@ -6,22 +6,23 @@ import * as memos from './memos.js';
 
 export default angular.module('geheugen', [])
     .constant('Memo', Memo)
-    .constant('memos.registry', memos.registry)
+    .constant('memos.config', memos.config)
+    .value('memos.registry', memos.registry)
     .provider('memos', () => memos.provider)
     .run(['$q', '$injector', ($q, $injector) => {
-        Object.keys(memos.registry).forEach(ensureMemo);
+        Object.keys(memos.config).forEach(ensureMemo);
 
         function ensureMemo(name) {
-            if (!(memos.registry[name] instanceof Memo)) {
-                let memo = memos.registry[name];
-                let dependencies = memo.opts.dependencies || [];
+            if (memos.registry[name] === undefined) {
+                let { opts, factory } = memos.config[name];
+                let dependencies = opts.dependencies || [];
 
                 memos.registry[name] = new Memo({
                     Q: $q,
-                    singleton: memo.opts.singleton !== undefined ? memo.opts.singleton : true,
+                    singleton: opts.singleton !== undefined ? opts.singleton : true,
                     dependencies: dependencies.map(ensureMemo),
-                    onReset: memo.opts.onReset !== undefined ? () => $injector.invoke(memo.opts.onReset) : undefined,
-                    factory: values => $injector.invoke(memo.factory, undefined, dependencies.reduce((locals, dependency, i) => {
+                    onReset: opts.onReset !== undefined ? () => $injector.invoke(opts.onReset) : undefined,
+                    factory: values => $injector.invoke(factory, undefined, dependencies.reduce((locals, dependency, i) => {
                         locals[dependency] = values[i];
 
                         return locals;

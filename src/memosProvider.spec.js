@@ -4,7 +4,8 @@ describe('geheugen', () => {
     describe('memosProvider()', () => {
         beforeEach(module('geheugen'));
 
-        afterEach(inject(['memos.registry', function (registry) {
+        afterEach(inject(['memos.config', 'memos.registry', function (config, registry) {
+            Object.getOwnPropertyNames(config).forEach(key => delete config[key]);
             Object.getOwnPropertyNames(registry).forEach(key => delete registry[key]);
         }]));
 

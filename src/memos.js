@@ -1,3 +1,4 @@
+export const config = {};
 export const registry = {};
 
 export function provider(name, ...args) {
@@ -7,7 +8,7 @@ export function provider(name, ...args) {
 
     let [ opts, factory ] = args.length === 1 ? [ {}, ...args ] : args;
 
-    registry[name] = { opts, factory };
+    config[name] = { opts, factory };
 
     return () => {
         let memo = () => registry[name].resolve();
