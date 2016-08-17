@@ -23,26 +23,22 @@ export default angular.module('geheugen', [])
             return ['$q', '$injector', ($q, $injector) => {
                 let $memo = ensureMemo($q, $injector, name);
 
-                let memo = () => $memo.resolve();
-
-                memo.get = () => $memo.get();
-                memo.set = (value) => $memo.set(value);
-                memo.reset = () => $memo.reset();
-                memo.resetDependants = () => $memo.resetDependants();
-
-                return memo;
+                return Object.defineProperties(() => $memo.resolve(), {
+                    get: { value: () => $memo.get() },
+                    set: { value: (value) => $memo.set(value) },
+                    reset: { value: () => $memo.reset() },
+                    resetDependants: { value: () => $memo.resetDependants() }
+                });
             }];
         };
 
         memosProvider.$get = ['$q', '$injector', ($q, $injector) => {
-            let memos = name => ensureMemo($q, $injector, name).resolve();
-
-            memos.get = name => ensureMemo($q, $injector, name).get();
-            memos.set = (name, value) => ensureMemo($q, $injector, name).set(value);
-            memos.reset = name => ensureMemo($q, $injector, name).reset();
-            memos.resetDependants = name => ensureMemo($q, $injector, name).resetDependants();
-
-            return memos;
+            return Object.defineProperties(name => ensureMemo($q, $injector, name).resolve(), {
+                get: { value: name => ensureMemo($q, $injector, name).get() },
+                set: { value: (name, value) => ensureMemo($q, $injector, name).set(value) },
+                reset: { value: name => ensureMemo($q, $injector, name).reset() },
+                resetDependants: { value: name => ensureMemo($q, $injector, name).resetDependants() }
+            });
         }];
 
         return memosProvider;
