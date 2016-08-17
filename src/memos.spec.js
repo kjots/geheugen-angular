@@ -4,7 +4,7 @@ describe('geheugen', () => {
     describe('memos()', () => {
         beforeEach(module('geheugen'));
 
-        describe('when the factory returns a promise', () => {
+        context('when the factory returns a promise', () => {
             it('should throw an error if there is no memo with the provided name', inject(memos => {
                 // Given
                 
@@ -33,7 +33,7 @@ describe('geheugen', () => {
             });
         });
 
-        describe('when the factory does not return a promise', () => {
+        context('when the factory does not return a promise', () => {
             it('should return the promise for the memo with the provided name', done => {
                 module(memosProvider => {
                     // Given
