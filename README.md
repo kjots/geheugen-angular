@@ -123,6 +123,17 @@ angular.module('exampleApp')
     });
 ```
 
+###### onSet
+Type: `Function`
+
+The set event handler.
+
+This function will be invoked when the memo is set.
+
+This function will be invoked via [`$injector.invoke()`](https://docs.angularjs.org/api/auto/service/$injector#invoke).
+
+The value of the memo will be available as the `value` local to this function.
+
 ###### onReset
 Type: `Function`
 
@@ -148,6 +159,31 @@ Returns the resolved value of the memo with the provided name.
 Type: `String`
 
 The name of the memo.
+
+##### memos.get(name)
+Type: `Function`
+
+Return the value of the memo with the provided name.
+
+###### name
+Type: `String`
+
+The name of the memo.
+
+##### memos.set(name, value)
+Type: `Function`
+
+Update the value of the memo with the provided name.
+
+###### name
+Type: `String`
+
+The name of the memo.
+
+###### value
+Type: `?`
+
+The value.
 
 ##### memos.reset(name)
 Type: `Function`
@@ -178,6 +214,21 @@ Type: `Function`
 Returns the resolved value of the memo.
 
 A memo instance can be created via [memosProvider()](#memos-provider).
+
+##### memo.get()
+Type: `Function`
+
+Return the value of the memo.
+
+##### memo.set(value)
+Type: `Function`
+
+Update the value of the memo.
+
+###### value
+Type: `?`
+
+The value.
 
 ##### memo.reset()
 Type: `Function`

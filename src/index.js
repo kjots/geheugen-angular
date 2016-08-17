@@ -25,6 +25,8 @@ export default angular.module('geheugen', [])
 
                 let memo = () => $memo.resolve();
 
+                memo.get = () => $memo.get();
+                memo.set = (value) => $memo.set(value);
                 memo.reset = () => $memo.reset();
                 memo.resetDependants = () => $memo.resetDependants();
 
@@ -35,6 +37,8 @@ export default angular.module('geheugen', [])
         memosProvider.$get = ['$q', '$injector', ($q, $injector) => {
             let memos = name => ensureMemo($q, $injector, name).resolve();
 
+            memos.get = name => ensureMemo($q, $injector, name).get();
+            memos.set = (name, value) => ensureMemo($q, $injector, name).set(value);
             memos.reset = name => ensureMemo($q, $injector, name).reset();
             memos.resetDependants = name => ensureMemo($q, $injector, name).resetDependants();
 
@@ -69,6 +73,7 @@ export default angular.module('geheugen', [])
                 Q: $q,
                 singleton: opts.singleton !== undefined ? opts.singleton : true,
                 dependencies: dependencies.map(dependency => ensureMemo($q, $injector, dependency, nextContext)),
+                onSet: opts.onSet !== undefined ? value => $injector.invoke(opts.onSet, undefined, { value }) : undefined,
                 onReset: opts.onReset !== undefined ? () => $injector.invoke(opts.onReset) : undefined,
                 factory: values => $injector.invoke(factory, undefined, dependencies.reduce((locals, dependency, i) => {
                     locals[dependency] = values[i];

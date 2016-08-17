@@ -52,6 +52,60 @@ describe('geheugen', () => {
             });
         });
 
+        describe('get()', () => {
+            it('should return the value of the memo with the provided name', done => {
+                let testValueMemoGetFn;
+
+                module(memosProvider => {
+                    testValueMemoGetFn = memosProvider('testValue', $q => $q.resolve('Test Value'));
+                });
+
+                inject(($injector, $rootScope, memos) => {
+                    // Given
+                    let testValueMemo = $injector.instantiate(testValueMemoGetFn);
+
+                    testValueMemo();
+
+                    $rootScope.$digest();
+
+                    // When
+                    let value = memos.get('testValue');
+
+                    // Then
+                    expect(value).to.equal('Test Value');
+
+                    done();
+                });
+            });
+        });
+
+        describe('set()', () => {
+            it('should update the value of the memo with the provided name', done => {
+                let testValueMemoGetFn;
+
+                module(memosProvider => {
+                    testValueMemoGetFn = memosProvider('testValue', $q => $q.resolve('Test Value'));
+                });
+
+                inject(($injector, $rootScope, memos) => {
+                    // Given
+                    let testValueMemo = $injector.instantiate(testValueMemoGetFn);
+
+                    testValueMemo();
+
+                    $rootScope.$digest();
+
+                    // When
+                    memos.set('testValue', 'New Test Value');
+
+                    // Then
+                    expect(testValueMemo()).to.eventually.equal('New Test Value').and.notify(done);
+
+                    $rootScope.$digest();
+                });
+            });
+        });
+
         describe('reset()', () => {
             it('should reset the memo with the provided name', done => {
                 let testValue, testValueMemoGetFn;

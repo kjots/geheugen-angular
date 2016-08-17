@@ -95,6 +95,60 @@ describe('geheugen', () => {
                 });
             });
 
+            describe('get()', () => {
+                it('should return the value of the memo', done => {
+                    let testValueMemoGetFn;
+
+                    module(memosProvider => {
+                        testValueMemoGetFn = memosProvider('testValue', $q => $q.resolve('Test Value'));
+                    });
+
+                    inject(($injector, $rootScope) => {
+                        // Given
+                        let testValueMemo = $injector.instantiate(testValueMemoGetFn);
+
+                        testValueMemo();
+
+                        $rootScope.$digest();
+
+                        // When
+                        let value = testValueMemo.get();
+
+                        // Then
+                        expect(value).to.equal('Test Value');
+
+                        done();
+                    });
+                });
+            });
+
+            describe('set()', () => {
+                it('should update the value of the memo', done => {
+                    let testValueMemoGetFn;
+
+                    module(memosProvider => {
+                        testValueMemoGetFn = memosProvider('testValue', $q => $q.resolve('Test Value'));
+                    });
+
+                    inject(($injector, $rootScope) => {
+                        // Given
+                        let testValueMemo = $injector.instantiate(testValueMemoGetFn);
+
+                        testValueMemo();
+
+                        $rootScope.$digest();
+
+                        // When
+                        testValueMemo.set('New Test Value');
+
+                        // Then
+                        expect(testValueMemo()).to.eventually.equal('New Test Value').and.notify(done);
+
+                        $rootScope.$digest();
+                    });
+                });
+            });
+
             describe('reset()', () => {
                 it('should reset the memo', done => {
                     let testValue, testValueMemoGetFn;
@@ -196,6 +250,60 @@ describe('geheugen', () => {
                     });
                 });
 
+                describe('get()', () => {
+                    it('should return the value of the memo', done => {
+                        let testValueMemoGetFn;
+
+                        module(memosProvider => {
+                            testValueMemoGetFn = memosProvider('testValue', { singleton: true }, $q => $q.resolve('Test Value'));
+                        });
+
+                        inject(($injector, $rootScope) => {
+                            // Given
+                            let testValueMemo = $injector.instantiate(testValueMemoGetFn);
+
+                            testValueMemo();
+
+                            $rootScope.$digest();
+
+                            // When
+                            let value = testValueMemo.get();
+
+                            // Then
+                            expect(value).to.equal('Test Value');
+
+                            done();
+                        });
+                    });
+                });
+
+                describe('set()', () => {
+                    it('should update the value of the memo', done => {
+                        let testValueMemoGetFn;
+
+                        module(memosProvider => {
+                            testValueMemoGetFn = memosProvider('testValue', { singleton: true }, $q => $q.resolve('Test Value'));
+                        });
+
+                        inject(($injector, $rootScope) => {
+                            // Given
+                            let testValueMemo = $injector.instantiate(testValueMemoGetFn);
+
+                            testValueMemo();
+
+                            $rootScope.$digest();
+
+                            // When
+                            testValueMemo.set('New Test Value');
+
+                            // Then
+                            expect(testValueMemo()).to.eventually.equal('New Test Value').and.notify(done);
+
+                            $rootScope.$digest();
+                        });
+                    });
+                });
+
                 describe('reset()', () => {
                     it('should reset the memo', done => {
                         let testValue, testValueMemoGetFn;
@@ -253,6 +361,57 @@ describe('geheugen', () => {
                         expect(testValueMemo()).to.eventually.equal('New Test Value').and.notify(done);
 
                         $rootScope.$digest();
+                    });
+                });
+
+                describe('get()', () => {
+                    it('should return the value of the memo', done => {
+                        let testValueMemoGetFn;
+
+                        module(memosProvider => {
+                            testValueMemoGetFn = memosProvider('testValue', { singleton: false }, $q => $q.resolve('Test Value'));
+                        });
+
+                        inject(($injector, $rootScope) => {
+                            // Given
+                            let testValueMemo = $injector.instantiate(testValueMemoGetFn);
+
+                            testValueMemo();
+
+                            $rootScope.$digest();
+
+                            // When
+                            let value = testValueMemo.get();
+
+                            // Then
+                            expect(value).to.equal('Test Value');
+
+                            done();
+                        });
+                    });
+                });
+            });
+
+            context('when the onSet function option is provided', () => {
+                describe('set()', () => {
+                    it('should invoke the onSet function', () => {
+                        let testOnSet, testValueMemoGetFn;
+
+                        module(memosProvider => {
+                            testOnSet = sinon.spy();
+                            testValueMemoGetFn = memosProvider('testValue', { onSet: [ 'value', testOnSet ] }, $q => $q.resolve('Test Value'));
+                        });
+
+                        inject($injector => {
+                            // Given
+                            let testValueMemo = $injector.instantiate(testValueMemoGetFn);
+
+                            // When
+                            testValueMemo.set('New Test Value');
+
+                            // Then
+                            expect(testOnSet).to.have.been.calledWith('New Test Value');
+                        });
                     });
                 });
             });
@@ -338,6 +497,39 @@ describe('geheugen', () => {
                         expect(testValueMemo()).to.eventually.equal('Test Dependency').and.notify(done);
 
                         $rootScope.$digest();
+                    });
+                });
+
+                describe('set()', () => {
+                    it('should reset the dependants of the memo', done => {
+                        let testValue, testDependencyMemoGetFn, testValueMemoGetFn;
+
+                        module(memosProvider => {
+                            testValue = 'Test Value';
+
+                            testDependencyMemoGetFn = memosProvider('testDependency', $q => $q.resolve('Test Dependency'));
+                            testValueMemoGetFn = memosProvider('testValue', { dependencies: [ 'testDependency' ] }, $q => $q.resolve(testValue));
+                        });
+
+                        inject(($injector, $rootScope) => {
+                            // Given
+                            let testDependencyMemo = $injector.instantiate(testDependencyMemoGetFn);
+                            let testValueMemo = $injector.instantiate(testValueMemoGetFn);
+
+                            testValueMemo();
+
+                            $rootScope.$digest();
+
+                            // When
+                            testValue = 'New Test Value';
+
+                            testDependencyMemo.set('New Test Dependency');
+
+                            // Then
+                            expect(testValueMemo()).to.eventually.equal('New Test Value').and.notify(done);
+
+                            $rootScope.$digest();
+                        });
                     });
                 });
 
