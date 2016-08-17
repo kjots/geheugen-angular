@@ -93,6 +93,15 @@ Default: `{}`
 
 The memo options.
 
+###### properties
+Type: `Object<String, Object>`
+
+The memo properties.
+
+These properties will be defined on the memo via [`Object.defineProperties()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties).
+
+Properties with the names `get`, `set`, `reset`, and `resetDependants` will be ignored.
+
 ###### singleton
 Type: `Boolean`
 

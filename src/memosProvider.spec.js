@@ -202,6 +202,29 @@ describe('geheugen', () => {
                 });
             });
 
+            context('when the properties option is set', () => {
+                it('should provide a memo with the properties defined', done => {
+                    let testValueMemoGetFn;
+
+                    module(memosProvider => {
+                        // Given
+                        let properties = { testProperty: { value: 'Test Property Value' } };
+
+                        testValueMemoGetFn = memosProvider('testValue', { properties }, $q => $q.resolve('Test Value'));
+                    });
+
+                    inject($injector => {
+                        // When
+                        let testValueMemo = $injector.instantiate(testValueMemoGetFn);
+
+                        // Then
+                        expect(testValueMemo.testProperty).to.equal('Test Property Value');
+
+                        done();
+                    });
+                });
+            });
+
             context('when the singleton option is set', () => {
                 it('should provide a singleton memo', done => {
                     let testValue, testValueMemoGetFn;

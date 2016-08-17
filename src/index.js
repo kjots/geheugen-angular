@@ -23,12 +23,12 @@ export default angular.module('geheugen', [])
             return ['$q', '$injector', ($q, $injector) => {
                 let $memo = ensureMemo($q, $injector, name);
 
-                return Object.defineProperties(() => $memo.resolve(), {
+                return Object.defineProperties(() => $memo.resolve(), Object.assign({}, opts.properties, {
                     get: { value: () => $memo.get() },
                     set: { value: (value) => $memo.set(value) },
                     reset: { value: () => $memo.reset() },
                     resetDependants: { value: () => $memo.resetDependants() }
-                });
+                }));
             }];
         };
 
