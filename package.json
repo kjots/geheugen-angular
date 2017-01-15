@@ -22,7 +22,8 @@
     "url": "https://github.com/kjots/geheugen-angular/issues"
   },
   "engines": {
-    "node": ">=4"
+    "node": ">=6.9.4",
+    "npm": ">=3.10.10"
   },
   "devDependencies": {
     "@kjots/geheugen": "^2.0.2",
