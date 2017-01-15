@@ -1,14 +1,14 @@
 # geheugen-angular
 
 [![Build Status](https://travis-ci.org/kjots/geheugen-angular.svg?branch=master)](https://travis-ci.org/kjots/geheugen-angular)
-[![npm version](https://badge.fury.io/js/geheugen-angular.svg)](https://www.npmjs.com/package/geheugen-angular)
+[![npm version](https://badge.fury.io/js/%40kjots%2Fgeheugen-angular.svg)](https://www.npmjs.com/package/@kjots/geheugen-angular)
 
 > Angular bindings for [geheugen](https://github.com/kjots/geheugen).
 
 ## Installation
 
 ```shell
-npm install --save geheugen-angular
+npm install --save @kjots/geheugen-angular
 ```
 
 ## Usage
@@ -17,7 +17,7 @@ npm install --save geheugen-angular
 <script src="babel-polyfill/dist/polyfill.js"></script>
 <script src="angular/angular.js"></script>
 
-<script src="geheugen-angular/dist/geheugen-angular.js"></script>
+<script src="@kjots/geheugen-angular/dist/geheugen-angular.js"></script>
 
 <script>
     angular.module('exampleApp', [ 'geheugen' ]);

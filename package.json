@@ -1,5 +1,5 @@
 {
-  "name": "geheugen-angular",
+  "name": "@kjots/geheugen-angular",
   "version": "1.3.0",
   "description": "Angular bindings for geheugen",
   "main": "lib/index.js",
