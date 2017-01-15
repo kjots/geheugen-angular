@@ -1,6 +1,6 @@
 import angular from 'angular';
 
-import { Memo } from 'geheugen';
+import { Memo } from '@kjots/geheugen';
 
 export default angular.module('geheugen', [])
     .constant('Memo', Memo)

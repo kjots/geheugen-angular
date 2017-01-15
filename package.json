@@ -25,6 +25,7 @@
     "node": ">=4"
   },
   "devDependencies": {
+    "@kjots/geheugen": "^2.0.2",
     "angular": "^1.6.1",
     "angular-mocks": "^1.6.1",
     "babel-core": "^6.21.0",
@@ -40,7 +41,6 @@
     "del": "^2.2.2",
     "eslint": "^3.13.1",
     "exposify": "^0.5.0",
-    "geheugen": "^1.6.1",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
     "gulp-eslint": "^3.0.1",
